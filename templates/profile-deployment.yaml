@@ -1,0 +1,47 @@
+{{ $fullName := include "portfolio-chart.fullname" . }}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullName}}-profile-deployment
+  labels:
+    app: {{ $fullName}}-profile
+    helm.sh/chart: {{ include "portfolio-chart.chart" . }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ include "portfolio-chart.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ $fullName}}-profile
+  template:
+    metadata:
+      labels:
+        app: {{ $fullName}}-profile
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}      
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+      - name: profile
+        securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+        image: "{{ .Values.profile.image.repository }}:{{ .Values.profile.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.profile.image.pullPolicy }}
+        ports:
+          - name: http
+            containerPort: 8080
+            protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /health/liveness
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /health/readiness
+            port: http

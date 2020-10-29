@@ -1,0 +1,20 @@
+apiVersion: skaffold/v2beta8
+kind: Config
+metadata:
+  name: portfolio
+build:
+  local:
+    push: false
+  artifacts:
+  - image: portfolio_counselor/profile-src
+    context: profile-src
+  - image: portfolio_counselor/web-client-src
+    context: web-client-src
+deploy:
+  kubectl:
+    manifests:
+    - manifests-src/portfolio-deployment.yml
+    - manifests-src/portfolio-service.yml
+    - manifests-src/web-client-deployment.yml
+    - manifests-src/web-client-service.yml
+    - manifests-src/ingress.yaml
