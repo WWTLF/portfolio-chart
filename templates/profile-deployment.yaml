@@ -37,11 +37,11 @@ spec:
           - name: http
             containerPort: 8080
             protocol: TCP
-        livenessProbe:
-          httpGet:
-            path: /health/liveness
-            port: http
-        readinessProbe:
-          httpGet:
-            path: /health/readiness
-            port: http
+        # livenessProbe:
+        #   httpGet:
+        #     path: /health/liveness
+        #     port: http
+        # readinessProbe:
+        #   httpGet:
+        #     path: /health/readiness
+        #     port: http

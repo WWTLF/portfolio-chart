@@ -2,17 +2,26 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+
+pg:
+  postgresqlPassword: "Skr7-ykSqPG_LTP"
+  postgresqlDatabase: "main"
+  service:
+      type: NodePort
+      nodePort: 30432
+
 profile:
   image: 
+
     repository: registry.gitlab.com/portfolio_counselor/profile-src
-    pullPolicy: ifNotPresent
+    pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
     tag: "latest"
 
 web:
   image: 
-    repository: registry.gitlab.com/portfolio_counselor/web-client-src:latest
-    pullPolicy: ifNotPresent
+    repository: registry.gitlab.com/portfolio_counselor/web-client-src
+    pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
     tag: "latest"
 
@@ -48,20 +57,21 @@ service:
   port: 8080
 
 ingress:
-  enabled: true
-  annotations: 
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: portfolio.local
-      paths: [
-        "/"
-      ]
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  web:
+    enabled: true
+    annotations: {}
+      # nginx.ingress.kubernetes.io/rewrite-target: /$2
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: portfolio.local
+        paths: [
+          "/"
+        ]
+    tls: []
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #      - chart-example.local
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

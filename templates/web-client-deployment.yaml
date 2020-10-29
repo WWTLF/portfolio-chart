@@ -15,11 +15,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: web-client
+      app: {{ $fullName}}-web-client
   template:
     metadata:
       labels:
-        app: web-client
+        app: {{ $fullName}}-web-client
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -37,11 +37,3 @@ spec:
           - name: http
             containerPort: 8080
             protocol: TCP
-        livenessProbe:
-          httpGet:
-            path: /health/liveness
-            port: http
-        readinessProbe:
-          httpGet:
-            path: /health/readiness
-            port: http
