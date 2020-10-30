@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "portfolio-chart.fullname" . }}-profile-configmap
+data:
+  # property-like keys; each key maps to a simple value
+  POSTGRESQL_HOSTNAME: "{{ .Release.Name }}-pg"
+  POSTGRESQL_PORT_NUMBER: "{{ .Values.profile.db.port }}"
+  POSTGRESQL_DB: "{{ .Values.profile.db.name }}"
+  POSTGRESQL_URL: "postgres://postgres:$PGPASSWORD@{{ $.Release.Name }}-pg:{{ .Values.profile.db.port }}/main?sslmode=disable"

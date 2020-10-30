@@ -12,11 +12,14 @@ pg:
 
 profile:
   image: 
-
     repository: registry.gitlab.com/portfolio_counselor/profile-src
     pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
     tag: "latest"
+  db:
+    user: profile
+    password: 6G5Pnt%}F)HT4Kp_
+    name: profile
 
 web:
   image: 
