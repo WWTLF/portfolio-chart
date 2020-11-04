@@ -2,6 +2,11 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+broker:
+  service:
+    type: NodePort
+    nodePorts:
+      client: 30092
 
 pg:
   postgresqlPassword: "Skr7-ykSqPG_LTP"
@@ -18,8 +23,9 @@ profile:
     tag: "latest"
   db:
     user: profile
-    password: 6G5Pnt%}F)HT4Kp_
+    password: "123"
     name: profile
+    port: 5432
 
 web:
   image: 
@@ -70,6 +76,19 @@ ingress:
       - host: portfolio.local
         paths: [
           "/"
+        ]
+    tls: []
+
+  profile:
+    enabled: true
+    annotations: 
+      nginx.ingress.kubernetes.io/rewrite-target: /$2
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: portfolio.local
+        paths: [
+          "/profile/api/v1(/|$)(.*)"
         ]
     tls: []
     #  - secretName: chart-example-tls
