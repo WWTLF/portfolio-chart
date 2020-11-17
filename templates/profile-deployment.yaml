@@ -37,11 +37,88 @@ spec:
           - name: http
             containerPort: 8080
             protocol: TCP
-        # livenessProbe:
-        #   httpGet:
-        #     path: /health/liveness
-        #     port: http
+        livenessProbe:
+          httpGet:
+            path: /health/liveness
+            port: 8080        
         # readinessProbe:
         #   httpGet:
         #     path: /health/readiness
         #     port: http
+        env:
+          - name: POSTGRESQL_HOSTNAME
+            valueFrom:
+              configMapKeyRef:              
+                name: {{ include "portfolio-chart.fullname" . }}-profile-configmap              
+                key: POSTGRESQL_HOSTNAME
+          - name: POSTGRESQL_PORT_NUMBER
+            valueFrom:
+                configMapKeyRef:              
+                  name: {{ include "portfolio-chart.fullname" . }}-profile-configmap              
+                  key: POSTGRESQL_PORT_NUMBER
+          - name: POSTGRESQL_DB
+            valueFrom:
+                configMapKeyRef:              
+                  name: {{ include "portfolio-chart.fullname" . }}-profile-configmap              
+                  key: POSTGRESQL_DB
+          - name: SESSION_COOKIE
+            valueFrom:
+                configMapKeyRef:              
+                  name: {{ include "portfolio-chart.fullname" . }}-profile-configmap              
+                  key: SESSION_COOKIE
+          - name: OIDC_CLIENT_ID
+            valueFrom:
+                configMapKeyRef:              
+                  name: {{ include "portfolio-chart.fullname" . }}-profile-configmap              
+                  key: OIDC_CLIENT_ID
+          - name: OIDC_AUTH_URL
+            valueFrom:
+                configMapKeyRef:              
+                  name: {{ include "portfolio-chart.fullname" . }}-profile-configmap              
+                  key: OIDC_AUTH_URL
+          - name: OIDC_TOKEN_URL
+            valueFrom:
+                configMapKeyRef:              
+                  name: {{ include "portfolio-chart.fullname" . }}-profile-configmap              
+                  key: OIDC_TOKEN_URL
+          - name: OIDC_USERINFO_URL
+            valueFrom:
+                configMapKeyRef:              
+                  name: {{ include "portfolio-chart.fullname" . }}-profile-configmap              
+                  key: OIDC_USERINFO_URL
+          - name: OIDC_CALLBACK_URL
+            valueFrom:
+                configMapKeyRef:              
+                  name: {{ include "portfolio-chart.fullname" . }}-profile-configmap              
+                  key: OIDC_CALLBACK_URL
+          - name: OIDC_CONFIG_URL
+            valueFrom:
+                configMapKeyRef:              
+                  name: {{ include "portfolio-chart.fullname" . }}-profile-configmap              
+                  key: OIDC_CONFIG_URL
+          - name: OIDC_ISSUER_URL
+            valueFrom:
+                configMapKeyRef:              
+                  name: {{ include "portfolio-chart.fullname" . }}-profile-configmap              
+                  key: OIDC_ISSUER_URL
+          - name: OIDC_JWKS_URL
+            valueFrom:
+                configMapKeyRef:              
+                  name: {{ include "portfolio-chart.fullname" . }}-profile-configmap              
+                  key: OIDC_JWKS_URL
+          - name: POSTGRES_USER
+            valueFrom:
+                secretKeyRef:              
+                  name: {{ include "portfolio-chart.fullname" . }}-profile-secret
+                  key: POSTGRES_USER
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+                secretKeyRef:              
+                  name: {{ include "portfolio-chart.fullname" . }}-profile-secret
+                  key: POSTGRES_PASSWORD
+          - name: OIDC_CLIENT_SECRET
+            valueFrom:
+                secretKeyRef:              
+                  name: {{ include "portfolio-chart.fullname" . }}-profile-secret
+                  key: OIDC_CLIENT_SECRET
+          

@@ -24,12 +24,7 @@ appVersion: 0.0.1
 
 
 dependencies:
-  - name: kafka
-    version: "11.8.8"
-    repository: "https://charts.bitnami.com/bitnami"
-    alias: "broker"
-
   - name: postgresql
-    version: 9.8.7
+    version: 9.8.9
     repository: https://charts.bitnami.com/bitnami
     alias: pg

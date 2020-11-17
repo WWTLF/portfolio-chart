@@ -76,9 +76,9 @@ spec:
             export POSTGRESQL_URL="postgres://postgres:$PGPASSWORD@{{ $.Release.Name }}-pg:{{ .Values.profile.db.port }}/main?sslmode=disable"
             echo $POSTGRESQL_URL; 
             psql $POSTGRESQL_URL -c "create user ${PROFILE_POSTGRES_USER} with password '${PROFILE_POSTGRES_PASSWORD}';"
-            psql $POSTGRESQL_URL -c "create database profile with owner ${PROFILE_POSTGRES_USER};"
-            psql $POSTGRESQL_URL -c "create user saga with password '123';"
-            psql $POSTGRESQL_URL -c "create database saga with owner saga;"
+            psql $POSTGRESQL_URL -c "create database profile with owner ${PROFILE_POSTGRES_USER};"                        
+            psql $POSTGRESQL_URL -c "create user keycloak with password '{{ .Values.keycloak.db.password }}';"
+            psql $POSTGRESQL_URL -c "create database keycloak with owner keycloak;"
             
             
   backoffLimit: 0

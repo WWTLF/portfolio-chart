@@ -23,11 +23,24 @@ profile:
     tag: "latest"
   db:
     user: profile
-    password: "123"
+    password: "W8egz_yM3CFN*2yf"
     name: profile
     port: 5432
+  oidc:
+    SESSION_COOKIE: "INGRESSCOOKIE"
+    OIDC_CLIENT_ID: "frontend"
+    OIDC_CLIENT_SECRET: "31fc5171-4500-4050-863b-2dba1b793e28"
+    OIDC_AUTH_URL: "http://auth.portfolio.local/auth/realms/portfolio/protocol/openid-connect/auth"
+    OIDC_TOKEN_URL: "http://keycloak-http.auth.svc.cluster.local/auth/realms/portfolio/protocol/openid-connect/token"
+    OIDC_USERINFO_URL: "http://keycloak-http.auth.svc.cluster.local/auth/realms/portfolio/protocol/openid-connect/userinfo"
+    OIDC_CALLBACK_URL: "http://portfolio.local/profile/api/v1/auth/callback"
+    OIDC_CONFIG_URL: "http://keycloak-http.auth.svc.cluster.local/auth/realms/portfolio"
+    OIDC_ISSUER_URL: "http://auth.portfolio.local/auth/realms/portfolio"
+    OIDC_JWKS_URL: "http://auth.portfolio.local/auth/realms/portfolio/protocol/openid-connect/certs"
+
 
 web:
+  enabled: false
   image: 
     repository: registry.gitlab.com/portfolio_counselor/web-client-src
     pullPolicy: Always
@@ -67,7 +80,7 @@ service:
 
 ingress:
   web:
-    enabled: true
+    enabled: false
     annotations: {}
       # nginx.ingress.kubernetes.io/rewrite-target: /$2
       # kubernetes.io/ingress.class: nginx
@@ -75,7 +88,7 @@ ingress:
     hosts:
       - host: portfolio.local
         paths: [
-          "/"
+          "/*"
         ]
     tls: []
 
@@ -83,6 +96,17 @@ ingress:
     enabled: true
     annotations: 
       nginx.ingress.kubernetes.io/rewrite-target: /$2
+      nginx.ingress.kubernetes.io/affinity: cookie
+      nginx.ingress.kubernetes.io/affinity-mode: balanced
+      nginx.ingress.kubernetes.io/session-cookie-name: INGRESSCOOKIE
+      nginx.ingress.kubernetes.io/session-cookie-path: /profile/api/v1/
+      nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.auth.svc.cluster.local:4180/oauth2/auth"    
+      nginx.ingress.kubernetes.io/auth-signin: "http://$host/oauth2/start?rd=$escaped_request_uri"    
+      nginx.ingress.kubernetes.io/auth-response-headers: "X-Auth-Request-Email,X-Auth-Request-User,X-Auth-Request-Preferred-Username,Authorization"
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        auth_request_set $token  $upstream_http_x_auth_request_access_token;
+        proxy_set_header Authorization "Bearer $token";
+
       # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
     hosts:
@@ -120,5 +144,7 @@ tolerations: []
 
 affinity: {}
 
-
+keycloak:
+  db:
+    password: wHS?zWWr&PG?7nUC    
 # kubectl create secret docker-registry regcred --docker-server=registry.gitlab.com --docker-username=WWTLF --docker-password=<TODO> --docker-email=boris109@gmail.com

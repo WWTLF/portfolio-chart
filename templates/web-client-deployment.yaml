@@ -1,3 +1,5 @@
+{{- if .Values.web.enabled -}}
+
 {{ $fullName := include "portfolio-chart.fullname" . }}
 
 apiVersion: apps/v1
@@ -37,3 +39,5 @@ spec:
           - name: http
             containerPort: 8080
             protocol: TCP
+
+{{- end }}
