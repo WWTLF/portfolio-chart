@@ -57,6 +57,12 @@ spec:
                 name: {{ $fullName }}-profile-secret
                 key: POSTGRES_PASSWORD
 
+          - name: "KEYCLOAK_POSTGRES_PASSWORD"            
+            valueFrom:
+              secretKeyRef:
+                name: {{ $fullName }}-kc-migration-secret
+                key: POSTGRES_PASSWORD
+
           - name: "PROFILE_POSTGRE_DB"            
             valueFrom:
               configMapKeyRef:
@@ -76,8 +82,8 @@ spec:
             export POSTGRESQL_URL="postgres://postgres:$PGPASSWORD@{{ $.Release.Name }}-pg:{{ .Values.profile.db.port }}/main?sslmode=disable"
             echo $POSTGRESQL_URL; 
             psql $POSTGRESQL_URL -c "create user ${PROFILE_POSTGRES_USER} with password '${PROFILE_POSTGRES_PASSWORD}';"
-            psql $POSTGRESQL_URL -c "create database profile with owner ${PROFILE_POSTGRES_USER};"                        
-            psql $POSTGRESQL_URL -c "create user keycloak with password '{{ .Values.keycloak.db.password }}';"
+            psql $POSTGRESQL_URL -c "create database profile with owner ${PROFILE_POSTGRES_USER};"                                    
+            psql $POSTGRESQL_URL -c "create user keycloak with password '${KEYCLOAK_POSTGRES_PASSWORD}';"
             psql $POSTGRESQL_URL -c "create database keycloak with owner keycloak;"
             
             

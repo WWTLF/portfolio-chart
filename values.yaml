@@ -17,10 +17,10 @@ pg:
 
 profile:
   image: 
-    repository: registry.gitlab.com/portfolio_counselor/profile-src
+    repository: wwtlf/profile
     pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
-    tag: "latest"
+    tag: "0.1"
   db:
     user: profile
     password: "W8egz_yM3CFN*2yf"
@@ -30,13 +30,13 @@ profile:
     SESSION_COOKIE: "INGRESSCOOKIE"
     OIDC_CLIENT_ID: "frontend"
     OIDC_CLIENT_SECRET: "31fc5171-4500-4050-863b-2dba1b793e28"
-    OIDC_AUTH_URL: "http://auth.portfolio.local/auth/realms/portfolio/protocol/openid-connect/auth"
+    OIDC_AUTH_URL: "http://arch.homework/auth/realms/portfolio/protocol/openid-connect/auth"
     OIDC_TOKEN_URL: "http://keycloak-http.auth.svc.cluster.local/auth/realms/portfolio/protocol/openid-connect/token"
     OIDC_USERINFO_URL: "http://keycloak-http.auth.svc.cluster.local/auth/realms/portfolio/protocol/openid-connect/userinfo"
-    OIDC_CALLBACK_URL: "http://portfolio.local/profile/api/v1/auth/callback"
+    OIDC_CALLBACK_URL: "http://arch.homework/profile/api/v1/auth/callback"
     OIDC_CONFIG_URL: "http://keycloak-http.auth.svc.cluster.local/auth/realms/portfolio"
-    OIDC_ISSUER_URL: "http://auth.portfolio.local/auth/realms/portfolio"
-    OIDC_JWKS_URL: "http://auth.portfolio.local/auth/realms/portfolio/protocol/openid-connect/certs"
+    OIDC_ISSUER_URL: "http://arch.homework/auth/realms/portfolio"
+    OIDC_JWKS_URL: "http://keycloak-http.auth.svc.cluster.local/auth/realms/portfolio/protocol/openid-connect/certs"
 
 
 web:
@@ -110,7 +110,7 @@ ingress:
       # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
     hosts:
-      - host: portfolio.local
+      - host: arch.homework
         paths: [
           "/profile/api/v1(/|$)(.*)"
         ]
@@ -146,5 +146,5 @@ affinity: {}
 
 keycloak:
   db:
-    password: wHS?zWWr&PG?7nUC    
+    password: wHSzWWrPG7nUC    
 # kubectl create secret docker-registry regcred --docker-server=registry.gitlab.com --docker-username=WWTLF --docker-password=<TODO> --docker-email=boris109@gmail.com

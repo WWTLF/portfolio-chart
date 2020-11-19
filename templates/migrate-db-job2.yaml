@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "{{ .Release.Name }}-migrate-db"
+  name: "{{ .Release.Name }}-migrate2-db"
   labels:
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
     app.kubernetes.io/instance: {{ .Release.Name | quote }}
@@ -10,7 +10,7 @@ metadata:
     helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
   annotations:    
     "helm.sh/hook": post-upgrade,post-install
-    "helm.sh/hook-weight": "10"
+    "helm.sh/hook-weight": "11"
     "helm.sh/hook-delete-policy": hook-succeeded
 spec:
   template:
@@ -46,12 +46,13 @@ spec:
       containers:
       - name: migrate-db-job
         image: wwtlf/portfolio_migrate:0.1
-        env:         
+        env:                  
           - name: "POSTGRESQL_PASSWORD"            
             valueFrom:
               secretKeyRef:
-                name: {{ $fullName }}-profile-secret
-                key: POSTGRES_PASSWORD        
+                name: {{ $fullName }}-kc-migration-secret
+                key: POSTGRES_PASSWORD
+
           - name: POSTGRESQL_HOSTNAME
             valueFrom:
               configMapKeyRef:
@@ -67,7 +68,7 @@ spec:
         command:
           - sh
           - "-c"
-          - /mig/migrate_profile.sh
+          - /mig/migrate_keycloak.sh
             
             
   backoffLimit: 0
